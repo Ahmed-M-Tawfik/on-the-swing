@@ -1,0 +1,17 @@
+:: StoryData
+{
+    "ifid": "3343DA80-8D0C-4485-8292-8C41EBB11ADB",
+    "format": "SugarCube",
+    "format-version": "2.36.1",
+    "start": "Start"
+}
+
+:: StoryInit
+/* Used to set up all SugarCube-dependants*/
+<<script>>
+  console.log("StoryInit started");
+  window.s.setup(Engine, State);
+<</script>>
+
+:: StoryTitle
+On the Swings

@@ -1,0 +1,7 @@
+#setting-image img {
+  width: 100%;
+  min-width: 300px;
+  max-width: 800px;
+  height: auto;
+  display: block;
+}
