@@ -5,5 +5,5 @@
 Watch mode
 
 ```bash
-tweego src js/init js/control js/game js/ui -o story.html --watch
+tweego src js/init js/control js/game js/ui assets -o story.html --watch
 ```
