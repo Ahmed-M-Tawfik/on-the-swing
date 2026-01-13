@@ -5,3 +5,11 @@
   height: auto;
   display: block;
 }
+
+.player-action {
+  color: lightblue;
+}
+
+.value-update {
+  color: lightgreen;
+}

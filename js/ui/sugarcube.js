@@ -1,7 +1,8 @@
 console.log("Loaded sugarcube.js");
-/* SugarCube-specific functionality */
+
 window.ui = window.ui || {};
 
+/* SugarCube-specific functionality */
 /* Passage movement */
 window.ui.passage = window.ui.passage || {};
 window.ui.passage.goTo = function (passageName) {

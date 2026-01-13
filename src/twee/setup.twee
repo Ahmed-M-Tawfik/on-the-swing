@@ -11,7 +11,16 @@
 <<script>>
   console.log("StoryInit started");
   window.s.setup(Engine, State);
+
+  Macro.add("text_playerAction", {
+    tags: null,
+    handler: function () {
+      const content = this.payload[0].contents;
+      const html = '<div class="player-action">"' + content + '"</div>';
+      $(this.output).wiki(html);
+    }
+  });
 <</script>>
 
 :: StoryTitle
-On the Swings
+On the Swing

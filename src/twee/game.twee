@@ -1,58 +1,67 @@
 :: Start
+<<nobr>>
 <div id="start">
-  <h1>On the Swings</h1>
+  <h1>On the Swing</h1>
+  <div id="setting-image">
+    <img src='assets/swing.png' alt='Swing in foreground with fantastical scenery in the background'>
+  </div>
+  <p>You arrive at the crest of a hill, opening up the view to a magnificent vista of the landscape beyond. The seat of a swing hangs invitingly before you.</p>
   <button onclick="c.setupGame()">Start</button>
 </div>
+<</nobr>>
 
 :: Game
+<<nobr>>
 <div id="main-menu">
-  <h1>On the Swings</h1>
+  <h1>On the Swing</h1>
   <div id="setting-image"/>
   <div id="context"/>
   <div id="actions"/>
 </div>
 
-<<nobr>>
   <script>
     if(v.swing.seat.startedSwingingSignificantlyForTheFirstTime == undefined)
       v.swing.seat.startedSwingingSignificantlyForTheFirstTime = false;
     
-    var swingDesc = `You sit on a ${v.swing.seat.style} ${v.swing.seat.colour} ${v.swing.seat.material} seat, attached to a ${v.swing.style} ${v.swing.paintState} ${v.swing.colour} swing.`;
+    var swingDesc = ui.content.swingDescription(v);
 
-    var inertiaText = "";
-    var seatInertia = v.swing.seat.inertia;
-    if(seatInertia === 0) inertiaText = "The seat is very still, as if frozen in time.";
-    else if(seatInertia <= 5)
-      if(!v.swing.seat.startedSwingingSignificantlyForTheFirstTime)
-        inertiaText = "The seat rocks back and forth slowly, with the rhythm of a story waiting to be told.";
-      else
-        inertiaText = "The seat rocks back and forth slowly, as if the world were holding its breath.";
-    else if(seatInertia <= 10)
-      inertiaText = "The seat swings to and fro, with a steady, purposeful cadence.";
-    else if(seatInertia <= 20)
-      inertiaText = "The seat moves with real energy, the world blurring slightly at the edges of each swing.";
-    else
-      inertiaText = "The seat moves with wild abandon, the world spinning and swirling in a dizzying dance.";
+    var actionDesc = ui.format.playerAction(ui.content.actionDescription(v.lastRound.action, v.lastRound.isFumble));
 
-    if(seatInertia > 5)
+    var inertiaText = ui.content.seatInertiaDescription(v.swing.seat.inertia);
+    if(inertiaText !== ui.content.seatInertiaDescription(v.lastRound.oldInertia))
+      inertiaText = ui.format.valueUpdate(inertiaText);
+
+    if(v.swing.seat.inertia > 5)
       v.swing.seat.startedSwingingSignificantlyForTheFirstTime = true;
 
-    var tumblingText = "";
-    var seatTumbling = v.swing.seat.lateralTumble;
-    if(seatTumbling === 0)
-      tumblingText = "It hangs perfectly straight, aligned with the chains above.";
-    else if(seatTumbling <= 5)
-      tumblingText = "It tilts slightly to one side, twisting gently on its chains.";
-    else if(seatTumbling <= 10)
-      tumblingText = "It rocks and tilts unpredictably, swaying from side to side as the chains twist.";
-    else if(seatTumbling <= 20)
-      tumblingText = "It spins and tumbles chaotically, the chains tangled and rotating with disorienting momentum.";
-    var swingState = ``; /* todo */
+    var tumbleText = "";
+    if(false)  {
+      var tumbleText = ui.content.seatTumbleDescription(v.swing.seat.lateralTumble);
+      if(v.swing.seat.lateralTumble !== v.lastRound.oldLateralTumble)
+        tumbleText = ui.format.valueUpdate(tumbleText);
+    }
 
     var contextContainer = document.getElementById('context');
-    contextContainer.innerHTML += "<p>" + swingDesc + "</p><p>" + inertiaText + " " + tumblingText + "</p>";
+    contextContainer.innerHTML = "<p>" + swingDesc + "</p>";
+    contextContainer.innerHTML += "<p>" + actionDesc + "</p>";
+    contextContainer.innerHTML += "<p>" + inertiaText + " " + tumbleText + "</p>";
     
     var settingImageContainer = document.getElementById('setting-image');
     settingImageContainer.innerHTML = "<img src='assets/swing.png' alt='Swing in foreground with fantastical scenery in the background'>";
+
+    var actionsHtml = "";
+    if(v.swing.seat.inertia <= g.SWING_STATIONARY_LIMIT) {
+      actionsHtml += `<button onclick="c.swing_kickLegs()">Kick legs in the air</button><br/>`;
+      actionsHtml += `<button onclick="c.swingStart_pushOff()">Backpedal and push off the ground</button><br/>`;
+      actionsHtml += `<button onclick="c.swing_wait()">Wait while absorbing the scenery</button><br/>`;
+    }
+    if(v.swing.seat.inertia > g.SWING_STATIONARY_LIMIT) {
+      actionsHtml += `<button onclick="c.swing_kickLegs()">Kick legs to swing higher</button><br/>`;
+      actionsHtml += `<button onclick="c.swing_counterKick()">Lean back to slow down</button><br/>`;
+      actionsHtml += `<button onclick="c.swing_wait()">Coast, giving your legs a rest</button><br/>`;
+    }
+
+    var actionsContainer = document.getElementById('actions');
+    actionsContainer.innerHTML += actionsHtml;
   </script>
 <</nobr>>
