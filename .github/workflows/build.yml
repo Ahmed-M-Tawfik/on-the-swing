@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - 'releases/**'
+      - "releases/**"
 
 jobs:
   build:
@@ -17,26 +17,30 @@ jobs:
         with:
           go-version: 1.13.x
 
-      - name: Extract branch name - https://stackoverflow.com/a/58035262
-        shell: bash
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-        id: extract_branch
-
       - name: Build Twine SugarCube game
         run: |
           go get github.com/tmedwards/tweego
           export PATH=$PATH:$(go env GOPATH)/bin
           mkdir dist
-          tweego src js/init js/control js/game js/ui -o dist/index.html
+          tweego src js/init js/control js/game js/ui assets -o dist/index.html
+          cp -r assets dist/
 
-      - name: Push to deployment repo
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+      - name: Push to deployment branch
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          source-directory: 'dist/'
-          destination-github-username: 'Ahmed-M-Tawfik'
-          destination-repository-name: 'twine-exploration-survival-game.github.io'
-          user-email: amt222@hotmail.co.uk
-          target-branch: main
-          target-directory: ${{ steps.extract_branch.outputs.branch }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: deploy
+          force_orphan: true
+
+      # - name: Push to deployment repo
+      #   uses: cpina/github-action-push-to-another-repository@main
+      #   env:
+      #     SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+      #   with:
+      #     source-directory: "dist/"
+      #     destination-github-username: "Ahmed-M-Tawfik"
+      #     destination-repository-name: "twine-exploration-survival-game.github.io"
+      #     user-email: amt222@hotmail.co.uk
+      #     target-branch: main
+      #     target-directory: ${{ steps.extract_branch.outputs.branch }}
