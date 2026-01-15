@@ -32,15 +32,3 @@ jobs:
           publish_dir: ./dist
           publish_branch: deploy
           force_orphan: true
-
-      # - name: Push to deployment repo
-      #   uses: cpina/github-action-push-to-another-repository@main
-      #   env:
-      #     SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
-      #   with:
-      #     source-directory: "dist/"
-      #     destination-github-username: "Ahmed-M-Tawfik"
-      #     destination-repository-name: "twine-exploration-survival-game.github.io"
-      #     user-email: amt222@hotmail.co.uk
-      #     target-branch: main
-      #     target-directory: ${{ steps.extract_branch.outputs.branch }}
