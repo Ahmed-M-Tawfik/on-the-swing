@@ -19,7 +19,7 @@ jobs:
 
       - name: Build Twine SugarCube game
         run: |
-          go get github.com/tmedwards/tweego
+          go install github.com/tmedwards/tweego@latest
           export PATH=$PATH:$(go env GOPATH)/bin
           mkdir dist
           tweego src js/init js/control js/game js/ui assets -o dist/index.html
